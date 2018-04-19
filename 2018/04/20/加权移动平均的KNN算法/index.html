@@ -123,7 +123,7 @@
 
 
 
-  <title>Hello World | zyz's stduio</title>
+  <title>加权移动平均的KNN算法 | zyz's stduio</title>
   
 
 
@@ -230,7 +230,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/17/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/20/加权移动平均的KNN算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="zyz">
@@ -247,7 +247,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hello World</h1>
+          <h1 class="post-title" itemprop="name headline">加权移动平均的KNN算法</h1>
         
 
         <div class="post-meta">
@@ -259,7 +259,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-17T23:20:59+08:00">2018-04-17</time>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-04-20T00:03:02+08:00">2018-04-20</time>
             
 
             
@@ -295,15 +295,116 @@
       
 
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <p>前几天，有个同学让我帮忙实现一个代码，说是做个和时间序列有关的KNN算法的改进。<br>仔细问下来，就是个基于加权移动平均的KNN算法。</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><h3 id="加权移动平均法"><a href="#加权移动平均法" class="headerlink" title="加权移动平均法"></a>加权移动平均法</h3><p>加权移动平均给固定跨越期限内的每个变量值以不相等的权重。其原理是：历史各期产品需求的数据信息对预测未来期内的需求量的作用是不一样的。除了以n为周期的周期性变化外，远离目标期的变量值的影响力相对较低，故应给予较低的权重。</p>
+<h3 id="KNN算法"><a href="#KNN算法" class="headerlink" title="KNN算法"></a>KNN算法</h3><p>K近邻算法，即是给定一个训练数据集，对新的输入实例，在训练数据集中找到与该实例最邻近的K个实例（也就是上面所说的K个邻居），这K个实例的多数属于某个类，就把该输入实例分类到这个类中。</p>
+<h2 id="案例解释"><a href="#案例解释" class="headerlink" title="案例解释"></a>案例解释</h2><p>同学的案例问题是一个典型的多维度的二分类问题。较为特殊的地方就是其中一个维度是时间维度。<br>滑动平均的应用在于，将数据的时间维度特意提取出来，对每期的测试集进行单独的对应当期的训练集进行KNN分类，之后将该期的分类结果，乘以当期所占的权重，最后全期加总，作为改训练样例的分类标签。<br>该问题以8期为例，在训练集中，先进行5分法的交叉检验，得出精确度较高的K值。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><h3 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a>数据处理</h3><p>先读入训练集和测试集，并对训练集进行交叉检验的分组，此处笔者为图方便，实际上造成了较多的冗余，在数据量较大时，不宜采用此方法</p>
+<pre><code class="python"><span class="comment">#读入训练集</span>
+df1 = pd.read_csv(<span class="string">'train2.csv'</span>)
+
+<span class="comment">#读入测试集</span>
+df2 = pd.read_csv(<span class="string">'test2.csv'</span>)
+
+
+<span class="comment">#验证集的生成</span>
+list = []
+
+<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">80</span>):
+    list.append(i)
+rd.shuffle(list)
+
+uidlist = df1[<span class="string">'id'</span>].loc[<span class="number">0</span>:<span class="number">79</span>]
+
+tlist1=[]
+tlist2=[]
+tlist3=[]
+tlist4=[]
+tlist5=[]
+
+<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">80</span>):
+    mod = i%<span class="number">5</span>
+    <span class="keyword">if</span>(mod == <span class="number">0</span>):
+        tlist1.append(uidlist[i])
+    <span class="keyword">elif</span>(mod == <span class="number">1</span>):
+        tlist2.append(uidlist[i])
+    <span class="keyword">elif</span>(mod == <span class="number">2</span>):
+        tlist3.append(uidlist[i])
+    <span class="keyword">elif</span>(mod == <span class="number">3</span>):
+        tlist4.append(uidlist[i])
+    <span class="keyword">else</span>:
+        tlist5.append(uidlist[i])
+
+
+<span class="comment">#cdf作为验证集</span>
+cdf1 = df1[df1[<span class="string">'id'</span>].isin(tlist1)]
+cdf2 = df1[df1[<span class="string">'id'</span>].isin(tlist2)]
+cdf3 = df1[df1[<span class="string">'id'</span>].isin(tlist3)]
+cdf4 = df1[df1[<span class="string">'id'</span>].isin(tlist4)]
+cdf5 = df1[df1[<span class="string">'id'</span>].isin(tlist5)]
+
+<span class="comment">#vdf作为与cdf相对应的训练集</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">5</span>):
+    <span class="keyword">if</span>(i == <span class="number">0</span>):
+        vdf1 = cdf2.append(cdf3.append(cdf4.append(cdf5)))
+    <span class="keyword">elif</span>(i == <span class="number">1</span>):
+        vdf2 = cdf1.append(cdf3.append(cdf4.append(cdf5)))
+    <span class="keyword">elif</span>(i == <span class="number">2</span>):
+        vdf3 = cdf1.append(cdf2.append(cdf4.append(cdf5)))
+    <span class="keyword">elif</span>(i == <span class="number">3</span>):
+        vdf4 = cdf1.append(cdf3.append(cdf2.append(cdf5)))
+    <span class="keyword">else</span>:
+        vdf5 = cdf1.append(cdf3.append(cdf4.append(cdf2)))
+
+</code></pre>
+<h3 id="knn实现"><a href="#knn实现" class="headerlink" title="knn实现"></a>knn实现</h3><p>该函数为直接进行加权移动平均的knn计算，输出结果为直接加权结果</p>
+<pre><code class="python"><span class="comment">#定义函数，进行knn计算</span>
+<span class="comment">#参数vdf代表训练集，cdf代表验证集或者测试集,k代表knn的k值,resname代表文件名</span>
+<span class="function"><span class="keyword">def</span> <span class="title">validation</span><span class="params">(cdf, vdf, k, resname)</span>:</span>
+    <span class="comment">#建立KNN模型</span>
+    neigh = neighbors.KNeighborsClassifier(n_neighbors=k)
+    df5 = pd.DataFrame(columns = [<span class="string">'id'</span>,<span class="string">'month'</span>,<span class="string">'predict'</span>])
+
+    <span class="comment">#按月遍历训练</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">9</span>):
+        traindata = vdf[[<span class="string">'k1'</span>,<span class="string">'k2'</span>,<span class="string">'k3'</span>,<span class="string">'k4'</span>,<span class="string">'k5'</span>,<span class="string">'k6'</span>]][vdf[<span class="string">'month'</span>] == i].values
+        tagdata = vdf[[<span class="string">'dismiss'</span>]][vdf[<span class="string">'month'</span>] == i].values
+
+        neigh.fit(traindata,tagdata)
+        <span class="comment">#喂入</span>
+        inputdata = cdf[[<span class="string">'k1'</span>,<span class="string">'k2'</span>,<span class="string">'k3'</span>,<span class="string">'k4'</span>,<span class="string">'k5'</span>,<span class="string">'k6'</span>]][cdf[<span class="string">'month'</span>] == i].values
+        p = <span class="number">0</span>;
+
+        <span class="comment">#检验    </span>
+        <span class="keyword">for</span> j <span class="keyword">in</span> inputdata:
+            pred = neigh.predict([j])[<span class="number">0</span>]
+            pid = cdf.loc[p][<span class="string">'id'</span>]
+            month = i
+            df4 = pd.DataFrame(data=[[pid,month,pred]],columns = [<span class="string">'id'</span>,<span class="string">'month'</span>,<span class="string">'predict'</span>])
+            df5 = df5.append(df4)
+            p = p+<span class="number">1</span>
+
+    df6 = pd.DataFrame(columns=[<span class="string">'id'</span>,<span class="string">'value'</span>])
+
+    df5 = df5.reset_index()
+    dic = {}
+    <span class="keyword">for</span> index, row <span class="keyword">in</span> df5.iterrows():
+        dic[row[<span class="string">'id'</span>]]=<span class="number">0</span>
+
+    <span class="keyword">for</span> index, row <span class="keyword">in</span> df5.iterrows():
+        pid = row[<span class="string">'id'</span>]
+        month = row[<span class="string">'month'</span>]
+        pre = row[<span class="string">'predict'</span>]
+        value = dic[pid] + pre*month/<span class="number">36</span>
+        dic[pid] = value
+
+    f = open(resname+str(k)+<span class="string">'.txt'</span>,<span class="string">'w'</span>)
+    f.write(str(dic))
+    f.close()
+
+</code></pre>
+<h3 id="不足之处"><a href="#不足之处" class="headerlink" title="不足之处"></a>不足之处</h3><p>函数的可扩展性不足，例如时间长度应为可输入变量；<br>函数的模块性不足，对于训练的输入和预测，以及最后的输出，理应分成不同模块函数；<br>直接将结果交给同学处理了，其实应该和原始数据进行检验，并计算 accuracy，precision，recall等数值</p>
+<h2 id="项目地址"><a href="#项目地址" class="headerlink" title="项目地址"></a>项目地址</h2><p>其中数据仅为随机生成的数据，并无实际含义<br><a href="https://github.com/buaazyz/MA_knn" target="_blank" rel="noopener">https://github.com/buaazyz/MA_knn</a></p>
 
       
     </div>
@@ -328,15 +429,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2018/04/17/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/20/加权移动平均的KNN算法/" rel="prev" title="加权移动平均的KNN算法">
-                加权移动平均的KNN算法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -450,7 +551,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础知识"><span class="nav-number">1.</span> <span class="nav-text">基础知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#加权移动平均法"><span class="nav-number">1.1.</span> <span class="nav-text">加权移动平均法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#KNN算法"><span class="nav-number">1.2.</span> <span class="nav-text">KNN算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#案例解释"><span class="nav-number">2.</span> <span class="nav-text">案例解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码实现"><span class="nav-number">3.</span> <span class="nav-text">代码实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据处理"><span class="nav-number">3.1.</span> <span class="nav-text">数据处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#knn实现"><span class="nav-number">3.2.</span> <span class="nav-text">knn实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不足之处"><span class="nav-number">3.3.</span> <span class="nav-text">不足之处</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目地址"><span class="nav-number">4.</span> <span class="nav-text">项目地址</span></a></li></ol></div>
             
 
           </div>
