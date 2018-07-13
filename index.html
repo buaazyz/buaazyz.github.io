@@ -82,7 +82,7 @@
 <meta property="og:site_name" content="zyz&#39;s stduio">
 <meta property="og:description" content="最近处理一个接近千万级别的数据，用到了之前做毕设时常用的pandas，在处理该数据时，有一个需求，在dataframe的每一行中，通过对其中若干项的数据进行条件判断，将返回值赋予该行的最后一列考虑到该数量级别的数据量在单机处理即可，所以我尝试了以下三种方法： 通过最简单的遍历迭代遍历dataframe的每一行，将及计算后的返回值加到list中，然后最后将该list加入dataframe 在jupy">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2018-07-13T15:18:38.297Z">
+<meta property="og:updated_time" content="2018-07-13T15:23:18.721Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于pandas处理数据的几点记录">
 <meta name="twitter:description" content="最近处理一个接近千万级别的数据，用到了之前做毕设时常用的pandas，在处理该数据时，有一个需求，在dataframe的每一行中，通过对其中若干项的数据进行条件判断，将返回值赋予该行的最后一列考虑到该数量级别的数据量在单机处理即可，所以我尝试了以下三种方法： 通过最简单的遍历迭代遍历dataframe的每一行，将及计算后的返回值加到list中，然后最后将该list加入dataframe 在jupy">
@@ -312,7 +312,8 @@
 考虑到CPU的利用率等因素，将任务数量设置为-1,将数据分为5组，
 在sublime中运行，耗时为120s
 如果数据分为9组，则耗时330s，分为3组，则耗时为110s
-</code></pre><p>下附三种方法的部分源码：<br><code>`</code> python</p>
+</code></pre><p>下附三种方法的部分源码</p>
+<p><code>`</code> python</p>
 <p>#方法一<br>list = []<br>for indexs in df1.index:<br>    var1 = df1.loc[indexs].var1<br>    var2 = df1.loc[indexs].var2<br>    list.append(func(var1,var2))<br>df1.insert(5,’newvar’,list)</p>
 <p>#方法二<br>def f(row):<br>    var1 = row[‘var1’]<br>    var2 = row[‘var2’]<br>    res = func(var1,var2)<br>    return res<br>df1[‘newvar’] = df1.apply(f,axis = 1)</p>
 <p>#方法三<br>def tmp_func(df):<br>    df[‘newvar’] = df.apply(f,axis = 1)<br>    return df<br>def apply_parallel(df_in, func):<br>    results = Parallel(n_jobs=-1)(delayed(func)(df_in[i<em>2000000:(i+1)</em>2000000]) for i in range(5))<br>    return pd.concat(results)</p>
