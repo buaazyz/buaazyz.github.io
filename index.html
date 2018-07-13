@@ -75,17 +75,17 @@
 
 
 
-<meta name="description" content="前几天，有个同学让我帮忙实现一个代码，说是做个和时间序列有关的KNN算法的改进。仔细问下来，就是个基于加权移动平均的KNN算法。 基础知识加权移动平均法加权移动平均给固定跨越期限内的每个变量值以不相等的权重。其原理是：历史各期产品需求的数据信息对预测未来期内的需求量的作用是不一样的。除了以n为周期的周期性变化外，远离目标期的变量值的影响力相对较低，故应给予较低的权重。 KNN算法K近邻算法，即是给">
+<meta name="description" content="最近处理一个接近千万级别的数据，用到了之前做毕设时常用的pandas，在处理该数据时，有一个需求，在dataframe的每一行中，通过对其中若干项的数据进行条件判断，将返回值赋予该行的最后一列考虑到该数量级别的数据量在单机处理即可，所以我尝试了以下三种方法： 通过最简单的遍历迭代遍历dataframe的每一行，将及计算后的返回值加到list中，然后最后将该list加入dataframe 在jupy">
 <meta property="og:type" content="article">
-<meta property="og:title" content="加权移动平均的KNN算法">
-<meta property="og:url" content="http://yoursite.com/2018/04/20/加权移动平均的KNN算法/index.html">
+<meta property="og:title" content="关于pandas处理数据的几点记录">
+<meta property="og:url" content="http://yoursite.com/2018/07/13/关于pandas处理数据的几点记录/index.html">
 <meta property="og:site_name" content="zyz&#39;s stduio">
-<meta property="og:description" content="前几天，有个同学让我帮忙实现一个代码，说是做个和时间序列有关的KNN算法的改进。仔细问下来，就是个基于加权移动平均的KNN算法。 基础知识加权移动平均法加权移动平均给固定跨越期限内的每个变量值以不相等的权重。其原理是：历史各期产品需求的数据信息对预测未来期内的需求量的作用是不一样的。除了以n为周期的周期性变化外，远离目标期的变量值的影响力相对较低，故应给予较低的权重。 KNN算法K近邻算法，即是给">
+<meta property="og:description" content="最近处理一个接近千万级别的数据，用到了之前做毕设时常用的pandas，在处理该数据时，有一个需求，在dataframe的每一行中，通过对其中若干项的数据进行条件判断，将返回值赋予该行的最后一列考虑到该数量级别的数据量在单机处理即可，所以我尝试了以下三种方法： 通过最简单的遍历迭代遍历dataframe的每一行，将及计算后的返回值加到list中，然后最后将该list加入dataframe 在jupy">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2018-04-19T16:45:56.450Z">
+<meta property="og:updated_time" content="2018-07-13T15:18:38.297Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="加权移动平均的KNN算法">
-<meta name="twitter:description" content="前几天，有个同学让我帮忙实现一个代码，说是做个和时间序列有关的KNN算法的改进。仔细问下来，就是个基于加权移动平均的KNN算法。 基础知识加权移动平均法加权移动平均给固定跨越期限内的每个变量值以不相等的权重。其原理是：历史各期产品需求的数据信息对预测未来期内的需求量的作用是不一样的。除了以n为周期的周期性变化外，远离目标期的变量值的影响力相对较低，故应给予较低的权重。 KNN算法K近邻算法，即是给">
+<meta name="twitter:title" content="关于pandas处理数据的几点记录">
+<meta name="twitter:description" content="最近处理一个接近千万级别的数据，用到了之前做毕设时常用的pandas，在处理该数据时，有一个需求，在dataframe的每一行中，通过对其中若干项的数据进行条件判断，将返回值赋予该行的最后一列考虑到该数量级别的数据量在单机处理即可，所以我尝试了以下三种方法： 通过最简单的遍历迭代遍历dataframe的每一行，将及计算后的返回值加到list中，然后最后将该list加入dataframe 在jupy">
 
 
 
@@ -117,7 +117,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/20/加权移动平均的KNN算法/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/13/关于pandas处理数据的几点记录/"/>
 
 
 
@@ -217,6 +217,140 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/13/关于pandas处理数据的几点记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="zyz">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="zyz's stduio">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/13/关于pandas处理数据的几点记录/" itemprop="url">关于pandas处理数据的几点记录</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-13T22:46:55+08:00">2018-07-13</time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近处理一个接近千万级别的数据，用到了之前做毕设时常用的pandas，<br>在处理该数据时，有一个需求，在dataframe的每一行中，通过对其中若干项的数据进行条件判断，将返回值赋予该行的最后一列<br>考虑到该数量级别的数据量在单机处理即可，所以我尝试了以下三种方法：</p>
+<h2 id="通过最简单的遍历迭代"><a href="#通过最简单的遍历迭代" class="headerlink" title="通过最简单的遍历迭代"></a>通过最简单的遍历迭代</h2><pre><code>遍历dataframe的每一行，将及计算后的返回值加到list中，然后最后将该list加入dataframe
+在jupyter notebook中运行，耗时大概2个小时，
+在sublime运行，耗时为 420s
+</code></pre><h2 id="通过apply函数"><a href="#通过apply函数" class="headerlink" title="通过apply函数"></a>通过apply函数</h2><pre><code>关键点：apply（func， axis = 1）axis=1代表按行遍历，
+该func传入的值即为dataframe的每一行的series，
+该func返回的值，会在apply执行完后统一合成dataframe
+在sublime运行，耗时约为180s
+</code></pre><h2 id="通过多进程"><a href="#通过多进程" class="headerlink" title="通过多进程"></a>通过多进程</h2><pre><code>在apply的基础上，调用scipy的joblib库中的，Parallel、delayed函数，进行多进程操作，
+考虑到CPU的利用率等因素，将任务数量设置为-1,将数据分为5组，
+在sublime中运行，耗时为120s
+如果数据分为9组，则耗时330s，分为3组，则耗时为110s
+</code></pre><p>下附三种方法的部分源码：<br><code>`</code> python</p>
+<p>#方法一<br>list = []<br>for indexs in df1.index:<br>    var1 = df1.loc[indexs].var1<br>    var2 = df1.loc[indexs].var2<br>    list.append(func(var1,var2))<br>df1.insert(5,’newvar’,list)</p>
+<p>#方法二<br>def f(row):<br>    var1 = row[‘var1’]<br>    var2 = row[‘var2’]<br>    res = func(var1,var2)<br>    return res<br>df1[‘newvar’] = df1.apply(f,axis = 1)</p>
+<p>#方法三<br>def tmp_func(df):<br>    df[‘newvar’] = df.apply(f,axis = 1)<br>    return df<br>def apply_parallel(df_in, func):<br>    results = Parallel(n_jobs=-1)(delayed(func)(df_in[i<em>2000000:(i+1)</em>2000000]) for i in range(5))<br>    return pd.concat(results)</p>
+<p>if <strong>name</strong> == ‘<strong>main</strong>‘:<br>    df_all =apply_parallel(df1, tmp_func)</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -617,7 +751,7 @@ cdf5 = df1[df1[<span class="string">'id'</span>].isin(tlist5)]
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>

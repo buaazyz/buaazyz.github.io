@@ -75,17 +75,17 @@
 
 
 
-<meta name="description" content="前几天，有个同学让我帮忙实现一个代码，说是做个和时间序列有关的KNN算法的改进。仔细问下来，就是个基于加权移动平均的KNN算法。 基础知识加权移动平均法加权移动平均给固定跨越期限内的每个变量值以不相等的权重。其原理是：历史各期产品需求的数据信息对预测未来期内的需求量的作用是不一样的。除了以n为周期的周期性变化外，远离目标期的变量值的影响力相对较低，故应给予较低的权重。 KNN算法K近邻算法，即是给">
+<meta name="description" content="最近处理一个接近千万级别的数据，用到了之前做毕设时常用的pandas，在处理该数据时，有一个需求，在dataframe的每一行中，通过对其中若干项的数据进行条件判断，将返回值赋予该行的最后一列考虑到该数量级别的数据量在单机处理即可，所以我尝试了以下三种方法： 通过最简单的遍历迭代遍历dataframe的每一行，将及计算后的返回值加到list中，然后最后将该list加入dataframe 在jupy">
 <meta property="og:type" content="article">
-<meta property="og:title" content="加权移动平均的KNN算法">
-<meta property="og:url" content="http://yoursite.com/2018/04/20/加权移动平均的KNN算法/index.html">
+<meta property="og:title" content="关于pandas处理数据的几点记录">
+<meta property="og:url" content="http://yoursite.com/2018/07/13/关于pandas处理数据的几点记录/index.html">
 <meta property="og:site_name" content="zyz&#39;s stduio">
-<meta property="og:description" content="前几天，有个同学让我帮忙实现一个代码，说是做个和时间序列有关的KNN算法的改进。仔细问下来，就是个基于加权移动平均的KNN算法。 基础知识加权移动平均法加权移动平均给固定跨越期限内的每个变量值以不相等的权重。其原理是：历史各期产品需求的数据信息对预测未来期内的需求量的作用是不一样的。除了以n为周期的周期性变化外，远离目标期的变量值的影响力相对较低，故应给予较低的权重。 KNN算法K近邻算法，即是给">
+<meta property="og:description" content="最近处理一个接近千万级别的数据，用到了之前做毕设时常用的pandas，在处理该数据时，有一个需求，在dataframe的每一行中，通过对其中若干项的数据进行条件判断，将返回值赋予该行的最后一列考虑到该数量级别的数据量在单机处理即可，所以我尝试了以下三种方法： 通过最简单的遍历迭代遍历dataframe的每一行，将及计算后的返回值加到list中，然后最后将该list加入dataframe 在jupy">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2018-04-19T16:45:56.450Z">
+<meta property="og:updated_time" content="2018-07-13T15:18:38.297Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="加权移动平均的KNN算法">
-<meta name="twitter:description" content="前几天，有个同学让我帮忙实现一个代码，说是做个和时间序列有关的KNN算法的改进。仔细问下来，就是个基于加权移动平均的KNN算法。 基础知识加权移动平均法加权移动平均给固定跨越期限内的每个变量值以不相等的权重。其原理是：历史各期产品需求的数据信息对预测未来期内的需求量的作用是不一样的。除了以n为周期的周期性变化外，远离目标期的变量值的影响力相对较低，故应给予较低的权重。 KNN算法K近邻算法，即是给">
+<meta name="twitter:title" content="关于pandas处理数据的几点记录">
+<meta name="twitter:description" content="最近处理一个接近千万级别的数据，用到了之前做毕设时常用的pandas，在处理该数据时，有一个需求，在dataframe的每一行中，通过对其中若干项的数据进行条件判断，将返回值赋予该行的最后一列考虑到该数量级别的数据量在单机处理即可，所以我尝试了以下三种方法： 通过最简单的遍历迭代遍历dataframe的每一行，将及计算后的返回值加到list中，然后最后将该list加入dataframe 在jupy">
 
 
 
@@ -117,7 +117,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/04/20/加权移动平均的KNN算法/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/07/13/关于pandas处理数据的几点记录/"/>
 
 
 
@@ -229,7 +229,7 @@
         
           
         
-        Um..! 2 posts in total. Keep on posting.
+        Um..! 3 posts in total. Keep on posting.
       </span>
 
       
@@ -364,7 +364,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
